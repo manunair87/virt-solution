@@ -21,7 +21,7 @@
     
     <div class="main-content">
         <section class="services">
-            <h2>Our IT Services</h2>
+            <h2>Our Premium IT Services</h2>
             <div class="card">Server Management (Linux/Windows)</div>
             <div class="card">Kubernetes & Docker Setup</div>
             <div class="card">Performance & Load Testing</div>
