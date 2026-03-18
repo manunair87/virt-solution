@@ -1,0 +1,23 @@
+name: 1. QA Auto Deploy
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  deploy-qa:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Build QA Docker Image
+        run: sudo docker build -t virt-qa-site:latest .
+
+      - name: Import Image to Kubernetes (K3s)
+        run: sudo docker save virt-qa-site:latest | sudo k3s ctr images import -
+
+      - name: Apply QA Deployment
+        run: sudo k3s kubectl apply -f k8s/qa-deployment.yaml
+
+      - name: Restart QA Deployment
+        run: sudo k3s kubectl rollout restart deployment virt-qa-deployment

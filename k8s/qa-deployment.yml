@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: virt-qa-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: virt-qa
+  template:
+    metadata:
+      labels:
+        app: virt-qa
+    spec:
+      containers:
+      - name: virt-qa-container
+        image: virt-qa-site:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "500Mi"
+            cpu: "1000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: virt-qa-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30081
+  selector:
+    app: virt-qa

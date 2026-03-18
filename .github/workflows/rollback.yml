@@ -1,0 +1,24 @@
+name: 3. Emergency Rollback
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'ഏത് എൻവയോൺമെന്റ് ആണ് റോൾബാക്ക് ചെയ്യേണ്ടത്?'
+        required: true
+        default: 'QA'
+        type: choice
+        options:
+          - QA (virt-qa-deployment)
+          - Production (virt-site-deployment)
+
+jobs:
+  rollback:
+    runs-on: self-hosted
+    steps:
+      - name: Rollback QA
+        if: ${{ github.event.inputs.environment == 'QA (virt-qa-deployment)' }}
+        run: sudo k3s kubectl rollout undo deployment virt-qa-deployment
+
+      - name: Rollback Production
+        if: ${{ github.event.inputs.environment == 'Production (virt-site-deployment)' }}
+        run: sudo k3s kubectl rollout undo deployment virt-site-deployment

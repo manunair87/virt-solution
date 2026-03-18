@@ -1,0 +1,22 @@
+name: 2. Production Manual Deploy
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-prod:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Build Prod Docker Image
+        run: sudo docker build -t virt-site:latest .
+
+      - name: Import Image to Kubernetes (K3s)
+        run: sudo docker save virt-site:latest | sudo k3s ctr images import -
+
+      - name: Apply Prod Deployment
+        run: sudo k3s kubectl apply -f k8s/prod-deployment.yaml
+
+      - name: Restart Prod Deployment
+        run: sudo k3s kubectl rollout restart deployment virt-site-deployment
