@@ -7,7 +7,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Build Prod Docker Image
         run: sudo docker build -t virt-site:latest .
